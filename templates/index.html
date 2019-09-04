@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0,user-scale=1.0,user-scalable=no">
+
+  <style>
+
+   h1{
+     border-style:hidden hidden solid hidden;
+     padding:30px;
+     margin:0;
+     font-family:'Anton';
+   }
+   body{
+     margin:0;
+     background-color:#cccccc;
+
+        }
+   #TO{
+     margin-left:10px;
+   }
+
+   #webcam{
+     float:left;
+     width:49%;
+     border-right:5px solid;
+     height:100%;
+   }
+   #Attendees{
+     float:right;
+     width:48.50%;
+   }
+   #title_div{
+     color:#fff;
+     margin:0;
+     padding:0;
+     background: #0d0d0d;
+     width: 100%;
+        }
+
+   #form_style{
+     font_type='Open Sans'
+   }
+   h3{
+  font-family: Calibri;
+  font-size: 25pt;
+  font-style: normal;
+  font-weight: bold;
+  color:Black;
+  text-align: center;
+  text-decoration: underline
+}
+#bg
+{
+ margin-top:25px;
+ margin-left:80px;
+ margin-right:80px;
+ margin-bottom: 25px;
+}
+#videoStream
+{
+margin-top:50px;
+margin-left:80px;
+margin-right:80px;
+border: 1px solid;
+}
+
+table{
+  font-family: Calibri;
+  color:white;
+  font-size: 11pt;
+  font-style: normal;
+  font-weight: bold;
+  text-align:;
+  background-color: #0d0d0d;
+  border-collapse: collapse;
+  border: 2px solid navy
+
+}
+#student_form{
+  margin-left:65%;
+}
+table.inner{
+  border: 0px
+}
+.table1, td{
+ margin-left: 0px;
+ padding: 3px;
+ }
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+#FormDiv{
+
+	  margin: 20px;
+}
+   #start{
+     margin-top:7%;
+     margin-left:25%;
+     background-color: white;
+     color:black;
+     border: 2px solid #4CAF50;
+     padding: 15px 32px;
+     border-radius: 8px;
+     text-align: center;
+     text-decoration: none;
+     display: inline-block;
+     font-size: 16px;
+     opacity: 0;
+   }
+   #start:hover{
+     background-color: #4CAF50;
+     color: white;
+     border: none;
+   }
+   #stop{
+     background-color:white;
+     border-radius: 8px;
+     padding: 15px 32px;
+     text-align: center;
+     color:black;
+     border: 2px solid #f44336;
+     text-decoration: none;
+     display: inline-block;
+     font-size: 16px;
+   }
+   #stop:hover{
+     background-color: #f44336;
+ color: white;
+ border: none;
+}
+#GO{
+  margin-left:22%;
+  margin-top:4%;
+  width:100px;
+  height:30px;
+}
+#GO:hover{
+  background-color: black;
+color: white;
+border: none;
+}
+#status{
+	margin-left: 100px;
+	margin-bottom: 20px;
+	width: 280px;
+	height: 50px;
+	background-color: #000;
+	color: #fff;
+
+}
+
+    </style>
+  <title>"QR Based Attendance System"</title>
+</head>
+
+<body>
+  <div   id="title_div">
+  <center> <h1>QR Based Attendance System</h1></center>
+  </div>
+
+  <div id="webcam">
+
+	<div id="videoStream" >
+  <button id="start" onclick="startFunction()" >START</button>&nbsp&nbsp&nbsp
+    <button id="stop" onclick="stopFunction()">STOP</button><br><br>
+		<img id="bg" src="{{url_for('video_feed')}}"><br><br>
+
+		<button id="status"onclick="location.reload();">{{id}}</button>
+	</div>
+	<h3>DETAILS</h3>
+
+	<div id ="FormDiv">
+
+      <form id = "DataForm" method = "POST" action="/response" onsubmit = "return validate();">
+        <table id = "DataFormTable" align="center" cellpadding = "10">
+ <!----- ID number---------------------------------------------------------->
+  <tr>
+  <td>ID Number</td>
+  <td><input type="text" id = "ID" name="ID" maxlength="9"  readonly value={{id}}>
+  </td>
+  </tr>
+
+  <!----- First Name ---------------------------------------------------------->
+  <tr>
+  <td>FIRST NAME</td>
+  <td><input type="text" id = "First_Name" name="First_Name" maxlength="30" value={{FName}}>
+  (max 30 characters a-z and A-Z)
+  </td>
+  </tr>
+
+  <!----- Last Name ---------------------------------------------------------->
+  <tr>
+  <td>LAST NAME</td>
+  <td><input type="text" id = "Last_Name" name="Last_Name" maxlength="30" value={{LName}}>
+  (max 30 characters a-z and A-Z)
+  </td>
+  </tr>
+
+
+
+  <!----- Email Id ---------------------------------------------------------->
+  <tr>
+  <td>EMAIL ID</td>
+  <td><input type="text" id = "Email_Id" name="Email_Id" maxlength="100" value={{email}}></td>
+  </tr>
+
+  <!----- Mobile Number ---------------------------------------------------------->
+  <tr>
+  <td>MOBILE NUMBER</td>
+  <td>
+  <input type="text" id = "Mobile_Number" name="Mobile_Number" maxlength="10" value={{mobile}}>
+  (10 digit number)
+  </td>
+  </tr>
+
+
+  <!----- Submit and Reset ------------------------------------------------->
+  <tr>
+  <td colspan="2" align="center">
+  <input type="submit" name = "Submit" value="Submit" />
+  <input type="button" value="Reset" onclick="Clear()" />
+  </td>
+  </tr>
+  </table>
+
+  </form>
+        </div>
+  </div>
+
+<div class="tab">
+  <button class="tablinks" onclick="openAtt(event, 'Attendees')">Students Data</button>
+  <button class="tablinks" onclick="openAtt(event, 'Student Attendance')">Student Attendance</button>
+  <button class="tablinks" onclick="openAtt(event, 'Day Attendance')">Day Attendance</button>
+
+</div>
+
+<div id="Attendees" class="tabcontent">
+  <h3>Students Database</h3>
+	<div class="table1">
+
+		{{data1|safe}}
+
+	</div>
+</div>
+<div id="Student Attendance" class="tabcontent">
+  <form action="/from-to" method="POST" >
+  <h3>Student Attendance</h3>
+  <div id="student_form" >
+  <label>Enter ID number or Name</label>&nbsp&nbsp&nbsp&nbsp
+  <input type="text"/>
+<br><br><label>FROM<label>
+<select  id="from_day">
+<option value="-1">Day:</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+
+<option value="31">31</option>
+</select>
+
+<select id="from_Month">
+<option value="-1">Month:</option>
+<option value="January">Jan</option>
+<option value="February">Feb</option>
+<option value="March">Mar</option>
+<option value="April">Apr</option>
+<option value="May">May</option>
+<option value="June">Jun</option>
+<option value="July">Jul</option>
+<option value="August">Aug</option>
+<option value="September">Sep</option>
+<option value="October">Oct</option>
+<option value="November">Nov</option>
+<option value="December">Dec</option>
+</select>
+
+<select id="from_Year">
+
+<option value="-1">Year:</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+
+</select>
+<br><br><br>
+<label>TO</label>
+
+<select  id="to_Day">
+<option value="-1">Day:</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+
+<option value="31">31</option>
+</select>
+
+<select id="to_Month">
+<option value="-1">Month:</option>
+<option value="January">Jan</option>
+<option value="February">Feb</option>
+<option value="March">Mar</option>
+<option value="April">Apr</option>
+<option value="May">May</option>
+<option value="June">Jun</option>
+<option value="July">Jul</option>
+<option value="August">Aug</option>
+<option value="September">Sep</option>
+<option value="October">Oct</option>
+<option value="November">Nov</option>
+<option value="December">Dec</option>
+</select>
+
+<select name="to_Year">
+
+<option value="-1">Year:</option>
+<option value="2019">2019</option>
+<option value="2020">2020</option>
+<option value="2021">2021</option>
+
+</select>
+
+  <br><br><input type="submit" id="GO" name="Submit" value="Go"/>
+</form>
+
+
+	</div>
+</div>
+
+<div id="Day Attendance" class="tabcontent">
+  <h3>Daily Attendance</h3>
+  <div class="table1">
+		{{data3|safe}}
+
+	</div>
+</div>
+
+</body>
+<script>
+function numeric(inputtxt)
+{
+ var letterNumber = /^[0-9]+$/;
+ if((inputtxt.value.match(letterNumber)))
+  {
+   return true;
+  }
+else
+  {
+   return false;
+  }
+}
+function validate()
+{
+ var error="";
+ var firstname = document.getElementById( "First_Name" );
+ if( firstname.value == "" || numeric(firstname))
+ {
+  error = " Please write correct first name ";
+  alert(error);
+  return false;
+ }
+ var lastname = document.getElementById( "Last_Name" );
+ if( lastname.value == "" || numeric(lastname))
+ {
+  error = " Please write correct first name ";
+  alert(error);
+  return false;
+ }
+
+ var email = document.getElementById( "Email_Id" );
+ if( email.value == "" || email.value.indexOf( "@" ) == -1 )
+ {
+  error = " You Have To Write Valid Email Address. ";
+  alert(error);
+  return false;
+ }
+ var contactno= document.getElementById( "Mobile_Number" );
+ if( contactno.value == "" || contactno.value <= 10 )
+ {
+  error="Provide a valid Contact Number";
+  alert(error);
+  return false;
+ }
+ else
+ {
+  return true;
+ }
+}
+function startFunction(){
+   var element = document.getElementById('bg');
+   var b = document.getElementById('status');
+   var s = document.getElementById('start');
+   var st = document.getElementById('stop')
+   element.style.opacity = "1";
+   b.style.opacity="1";
+   s.style.opacity="0";
+   st.style.opacity="1";
+ }
+ function stopFunction(){
+   var element = document.getElementById('bg');
+      var b = document.getElementById('status');
+      var s = document.getElementById('stop');
+         var st = document.getElementById('start')
+      s.style.opacity="0";
+        st.style.opacity="1";
+   element.style.opacity = "0";
+   b.style.opacity="0";
+ }
+  function openAtt(evt, cityName) {
+
+  var i, tabcontent, tablinks;
+
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+function Clear(){
+	document.getElementById("ID").value='';
+	document.getElementById("First_Name").value='';
+	document.getElementById("Last_Name").value='';
+	document.getElementById("Email_Id").value='';
+	document.getElementById("Mobile_Number").value='';
+	document.getElementById("status").value='';
+}
+</script>
+</html>
